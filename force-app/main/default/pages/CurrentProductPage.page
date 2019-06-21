@@ -1,0 +1,42 @@
+<apex:page standardController="Product_Table__c" extensions="ProductTablePageControllerExtension" lightningStylesheets="true">
+	<apex:slds />
+	<div class="slds-scope">
+		<apex:form >
+			<apex:messages id="messages"/>
+			<apex:pageBlock >
+				<apex:outputLabel styleClass="slds-col slds-align_absolute-center slds-text-heading_large" value="{!Product_Table__c.Name}"/><br/>
+				<div class="slds-scrollable_none">
+					<apex:outputPanel >
+					<apex:pageBlockSection collapsible="false" columns="2">
+						<apex:pageBlockSectionItem >
+							<apex:outputPanel >
+								<div class="slds-text-align_right">
+									<apex:image styleClass="slds-col slds-size_1-of-2" value="{!Product_Table__c.Image_Url__c}"/>
+								</div>
+							</apex:outputPanel>
+						</apex:pageBlockSectionItem>
+						<apex:pageBlockSectionItem >
+							<apex:outputPanel styleClass="slds-text-align_left ">
+								<apex:outputLabel styleClass="slds-col slds-size_1-of-1 slds-text-title_caps" value="{!$ObjectType.Product_Table__c.fields.Units_Available__c.Label}:" />
+								<apex:outputField styleClass="slds-col slds-size_1-of-1" value="{!Product_Table__c.Units_Available__c}"/>
+								<dir/>
+								<apex:outputLabel styleClass="slds-col slds-size_1-of-1 slds-text-title_caps" value="{!$ObjectType.Product_Table__c.fields.Product_Description__c.Label}:" />
+								<apex:outputField styleClass="slds-col slds-size_1-of-1" value="{!Product_Table__c.Product_Description__c}"/>
+								<dir/>
+								<apex:outputLabel styleClass="slds-col slds-size_1-of-1 slds-text-title_caps" value="{!$ObjectType.Product_Table__c.fields.Unit_Price__c.Label}:" />
+								<apex:outputField styleClass="slds-col slds-size_1-of-1" value="{!Product_Table__c.Unit_Price__c}"/>
+							</apex:outputPanel>
+						</apex:pageBlockSectionItem>
+					</apex:pageBlockSection>
+				</apex:outputPanel>
+				</div>
+				<apex:pageBlockButtons location="bottom">
+					<apex:commandButton styleClass="slds-button slds-button_outline-brand" value="{!$Label.To_Shopping}" action="{!backToProductTablePage}"/>
+					<apex:commandLink styleClass="slds-button slds-button_brand" value="{!$Label.Buy}" action="{!buyCurrentItemPage}">
+						<apex:param name="currentProductTableId" value="{!Product_Table__c.Id}" assignTo="{!currentProductTableId}"/>
+					</apex:commandLink>
+				</apex:pageBlockButtons>
+			</apex:pageBlock>
+		</apex:form>
+	</div>
+</apex:page>

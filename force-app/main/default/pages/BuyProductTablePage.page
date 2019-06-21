@@ -1,0 +1,64 @@
+<apex:page standardController="Product_Table__c" extensions="BuyProductTableController" lightningStylesheets="true" docType="html-5.0">
+	<apex:slds />
+	<div class="slds-scope">
+		<apex:form >
+			<apex:outputPanel styleClass="slds-notify slds-notify_alert slds-theme_alert-texture slds-theme_error" rendered="{!IF(errorMessage != NULL,true, false)}" id="errorMessage">
+				<apex:outputText value="{!errorMessage}"></apex:outputText>
+			</apex:outputPanel>
+			<apex:outputPanel styleClass="slds-notify slds-notify_alert slds-theme_alert-texture slds-theme_warning" rendered="{!IF(inputWarningMessage != NULL,true, false)}" id="warningMessage">
+				<apex:outputText value="{!inputWarningMessage}"></apex:outputText>
+			</apex:outputPanel>
+			<apex:outputPanel styleClass="slds-notify slds-notify_alert slds-theme_alert-texture slds-theme_success" rendered="{!IF(confirmMessage != NULL,true, false)}" id="successMessage">
+				<apex:outputText value="{!confirmMessage}"></apex:outputText>
+			</apex:outputPanel>
+			<apex:pageBlock >
+				<div class="slds-scrollable_none">
+					<apex:outputPanel id="customerPanel">
+					<apex:pageBlockSection collapsible="false" columns="2">
+						<apex:pageBlockSectionItem >
+							<apex:outputPanel >
+								<apex:outputLabel styleClass="slds-col slds-align_absolute-center slds-text-heading_large" value="{!$Label.Contact_Information}"/><br/>
+								<apex:panelGrid columns="2">
+									<apex:outputLabel styleClass="slds-text-title_caps" value="{!$ObjectType.Contact.fields.Email__c.Label}:" />
+									<apex:inputField value="{!customerContact.Email__c}"/>
+									<apex:outputLabel styleClass="slds-text-title_caps" value="{!$ObjectType.Contact.fields.FirstName.Label}:" />
+									<apex:inputText value="{!customerContact.FirstName}"/>
+									<apex:outputLabel styleClass="slds-text-title_caps" value="{!$ObjectType.Contact.fields.LastName.Label}:" />
+									<apex:inputText value="{!customerContact.LastName}"/>
+								</apex:panelGrid>
+							</apex:outputPanel>
+						</apex:pageBlockSectionItem>
+						<apex:pageBlockSectionItem >
+							<apex:outputPanel >
+								<apex:outputLabel styleClass="slds-col slds-align_absolute-center slds-text-heading_large" value="{!$Label.Product_Information}"/><br/>
+								<apex:panelGrid columns="2">
+									<apex:outputLabel styleClass="slds-text-title_caps" value="{!$ObjectType.Product_Table__c.fields.Name.Label}:" />
+									<apex:outputField value="{!desiredProductTable.Name}"/>
+									<apex:outputLabel styleClass="slds-text-title_caps" value="{!$ObjectType.Product_Table__c.fields.Unit_Price__c.Label}:" />
+									<apex:outputField value="{!desiredProductTable.Unit_Price__c}"/>
+									<apex:outputLabel styleClass="slds-text-title_caps" value="{!$Label.Unit_Count}" />
+									<apex:input styleClass="slds-input slds-col slds-size_2-of-6" html-min="0" html-max="{!desiredProductTable.Units_Available__c}" type="number" value="{!unitCount}">
+										<apex:actionSupport event="onchange" reRender="totalAmountField, unitsAvailableField"/>
+									</apex:input>
+									<apex:outputLabel styleClass="slds-text-title_caps" value="{!$Label.Total_Amount}" />
+									<apex:outputText value="{0, Number, Currency}" id="totalAmountField">
+										<apex:param value="{!totalAmount}"/>
+									</apex:outputText>
+									<apex:outputLabel styleClass="slds-text-title_caps" value="{!$LAbel.Available_Amount_Of_Units}" />
+									<apex:outputText value="{0, Number}" id="unitsAvailableField">
+										<apex:param value="{!unitsAvailable}"/>
+									</apex:outputText>
+								</apex:panelGrid>
+							</apex:outputPanel>
+						</apex:pageBlockSectionItem>
+					</apex:pageBlockSection>
+				</apex:outputPanel>
+				</div>
+				<apex:pageBlockButtons location="bottom">
+					<apex:commandButton styleClass="slds-button slds-button_outline-brand" value="{!$Label.To_Shopping}" action="{!backToProductTablePage}"/>
+					<apex:commandButton styleClass="slds-button slds-button_brand" value="{!$Label.Buy}" action="{!buyCurrentItem}"/>
+				</apex:pageBlockButtons>
+			</apex:pageBlock>
+		</apex:form>
+	</div>
+</apex:page>
