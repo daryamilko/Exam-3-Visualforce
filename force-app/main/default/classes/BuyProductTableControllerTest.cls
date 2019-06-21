@@ -7,11 +7,11 @@ public with sharing class BuyProductTableControllerTest {
 			Name = 'Soft Toy',
 			Product_Description__c = 'So cool to squeeze, so perfect to sleep with!',
 			Image_Url__c = 'https://sc01.alicdn.com/kf/HTB1JiascGLN8KJjSZFm763Q6XXar/free-sample-plush-dog-pillow-for-kids.png_300x300.jpg',
-            Unit_Price__c = 20,
-            Units_Available__c = 130
+			Unit_Price__c = 20,
+			Units_Available__c = 130
 		);
-        testData.add(product);
-        Contact customerContact = new Contact(
+		testData.add(product);
+		Contact customerContact = new Contact(
 			Email__c = 'testContactFromDb@test.test',
 			FirstName = 'Test',
 			LastName = 'Test'
@@ -24,7 +24,7 @@ public with sharing class BuyProductTableControllerTest {
 		Product_Table__c product = [
 			SELECT Id, Name, Unit_Price__c, Units_Available__c
 			FROM Product_Table__c
-            WHERE Name = 'Soft Toy'
+			WHERE Name = 'Soft Toy'
 			LIMIT 1
 		];
 		ApexPages.StandardController stdController = new ApexPages.StandardController(product);
@@ -50,8 +50,8 @@ public with sharing class BuyProductTableControllerTest {
 
 		Test.startTest();
 		buyProductTableController.unitCount = 50;
-        Decimal actualTotalAmount = buyProductTableController.getTotalAmount();
-        Decimal actualAvailableUnits = buyProductTableController.getUnitsAvailable();
+		Decimal actualTotalAmount = buyProductTableController.getTotalAmount();
+		Decimal actualAvailableUnits = buyProductTableController.getUnitsAvailable();
 		buyProductTableController.buyCurrentItem();
 		Pagereference tablePage = buyProductTableController.backToProductTablePage();
 		Test.stopTest();
@@ -72,24 +72,24 @@ public with sharing class BuyProductTableControllerTest {
 		System.assertEquals(productTablePage.getUrl(), tablePage.getUrl());
 		System.assertEquals(product.Unit_Price__c * buyProductTableController.unitCount, actualTotalAmount);
 		System.assertEquals(product.Units_Available__c - buyProductTableController.unitCount, actualAvailableUnits);
-        System.assertEquals(System.Label.Order_Table_Confirm, buyProductTableController.confirmMessage);
-        System.assertEquals(true, String.isBlank(buyProductTableController.errorMessage));
-        System.assertEquals(true, String.isBlank(buyProductTableController.inputWarningMessage));
+		System.assertEquals(System.Label.Order_Table_Confirm, buyProductTableController.confirmMessage);
+		System.assertEquals(true, String.isBlank(buyProductTableController.errorMessage));
+		System.assertEquals(true, String.isBlank(buyProductTableController.inputWarningMessage));
 	}
 
-    @isTest
-    public static void buyProductForDbContactWithErrorTest() {
+	@isTest
+	public static void buyProductForDbContactWithErrorTest() {
 		Product_Table__c product = [
 			SELECT Id, Name, Unit_Price__c, Units_Available__c
 			FROM Product_Table__c
-            WHERE Name = 'Soft Toy'
+			WHERE Name = 'Soft Toy'
 			LIMIT 1
 		];
 		ApexPages.StandardController stdController = new ApexPages.StandardController(product);
 		BuyProductTableController buyProductTableController = new BuyProductTableController(stdController);
 		PageReference productTablePage = new PageReference(System.Label.PageReference_ProductTable);
-        String newLastName = 'New Last Name';
-        String expectedWarningMessage = System.Label.Units_Available + ' ' + (Integer)product.Units_Available__c;
+		String newLastName = 'New Last Name';
+		String expectedWarningMessage = System.Label.Units_Available + ' ' + (Integer)product.Units_Available__c;
 		buyProductTableController.customerContact = new Contact(
 			Email__c = 'testContactFromDb@test.test',
 			FirstName = 'Test',
@@ -98,8 +98,8 @@ public with sharing class BuyProductTableControllerTest {
 
 		Test.startTest();
 		buyProductTableController.unitCount = 0;
-        Decimal actualTotalAmount = buyProductTableController.getTotalAmount();
-        Decimal actualAvailableUnits = buyProductTableController.getUnitsAvailable();
+		Decimal actualTotalAmount = buyProductTableController.getTotalAmount();
+		Decimal actualAvailableUnits = buyProductTableController.getUnitsAvailable();
 		buyProductTableController.buyCurrentItem();
 		Test.stopTest();
 
@@ -107,7 +107,7 @@ public with sharing class BuyProductTableControllerTest {
 			SELECT Id, LastName
 			FROM Contact
 			WHERE Email__c = 'testContactFromDb@test.test'
-            LIMIT 1
+			LIMIT 1
 		];
 		List<Order_Table__c> orderListAfterBuying = [
 			SELECT Id
@@ -115,12 +115,12 @@ public with sharing class BuyProductTableControllerTest {
 			WHERE Product__c = :product.Id
 		];
 
-        System.assertEquals(newLastName, contactAfterBuying.LastName);
+		System.assertEquals(newLastName, contactAfterBuying.LastName);
 		System.assertEquals(0, orderListAfterBuying.size());
 		System.assertEquals(0, actualTotalAmount);
 		System.assertEquals(product.Units_Available__c, actualAvailableUnits);
-        System.assertEquals(true, String.isBlank(buyProductTableController.confirmMessage));
-        System.assertEquals(true, String.isBlank(buyProductTableController.errorMessage));
-        System.assertEquals(expectedWarningMessage, buyProductTableController.inputWarningMessage);
+		System.assertEquals(true, String.isBlank(buyProductTableController.confirmMessage));
+		System.assertEquals(true, String.isBlank(buyProductTableController.errorMessage));
+		System.assertEquals(expectedWarningMessage, buyProductTableController.inputWarningMessage);
 	}
 }
